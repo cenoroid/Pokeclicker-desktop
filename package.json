@@ -98,6 +98,9 @@
         "zip"
       ]
     },
+    "dmg": {
+      "backgroundColor": "#ffffff"
+    },
     "linux": {
       "category": "Game",
       "synopsis": "Play PokéClicker from a native desktop window",
