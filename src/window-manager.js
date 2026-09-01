@@ -232,8 +232,12 @@ class WindowManager {
 }
 
 function configureSessionPermissions(electronSession, allowedRoots) {
+  const allowedPermissions = new Set([
+    'clipboard-sanitized-write',
+    'notifications',
+  ]);
   const canUsePermission = (webContents, permission) =>
-    permission === 'notifications' &&
+    allowedPermissions.has(permission) &&
     Boolean(webContents) &&
     isAllowedFileUrl(webContents.getURL(), allowedRoots);
 

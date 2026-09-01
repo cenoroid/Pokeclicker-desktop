@@ -71,6 +71,13 @@ function attachSmokeTest(targetWindow, mode) {
 
     setTimeout(async () => {
       try {
+        if (mode === 'game') {
+          await targetWindow.webContents.executeJavaScript(
+            `navigator.clipboard.writeText('PokéClicker clipboard smoke test')`,
+            true,
+          );
+        }
+
         const rendererState = await targetWindow.webContents.executeJavaScript(`({
           appStarted: typeof App !== 'undefined' && Boolean(App.game),
           hasBody: Boolean(document.body),
