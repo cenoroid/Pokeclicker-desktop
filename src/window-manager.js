@@ -9,6 +9,32 @@ const {
 } = require('./path-policy');
 const { installZoomControls } = require('./zoom');
 
+function createWindowOptions({ alternate, iconPath, persistenceName }) {
+  return {
+    autoHideMenuBar: true,
+    backgroundColor: '#111827',
+    height: 800,
+    icon: iconPath,
+    minHeight: 480,
+    minWidth: 640,
+    name: persistenceName,
+    show: false,
+    title: alternate ? 'PokéClicker (alternate)' : 'PokéClicker',
+    width: 1280,
+    windowStatePersistence: true,
+    webPreferences: {
+      allowRunningInsecureContent: false,
+      backgroundThrottling: false,
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true,
+      spellcheck: false,
+      webSecurity: true,
+      webviewTag: false,
+    },
+  };
+}
+
 class WindowManager {
   constructor({ clientVersion, gameIndexPath, setupIndexPath }) {
     this.allowedRoots = [
@@ -20,32 +46,22 @@ class WindowManager {
     this.iconPath = path.join(__dirname, 'icon.png');
     this.mainWindow = null;
     this.mode = 'setup';
+    this.nextAlternateWindowId = 1;
     this.setupIndexPath = setupIndexPath;
     this.windows = new Set();
   }
 
   createWindow({ alternate = false } = {}) {
-    const targetWindow = new BrowserWindow({
-      autoHideMenuBar: true,
-      backgroundColor: '#111827',
-      height: 800,
-      icon: this.iconPath,
-      minHeight: 480,
-      minWidth: 640,
-      show: false,
-      title: alternate ? 'PokéClicker (alternate)' : 'PokéClicker',
-      width: 1280,
-      webPreferences: {
-        allowRunningInsecureContent: false,
-        backgroundThrottling: false,
-        contextIsolation: true,
-        nodeIntegration: false,
-        sandbox: true,
-        spellcheck: false,
-        webSecurity: true,
-        webviewTag: false,
-      },
-    });
+    const persistenceName = alternate
+      ? `pokeclicker-alternate-${this.nextAlternateWindowId++}`
+      : 'pokeclicker-main';
+    const targetWindow = new BrowserWindow(
+      createWindowOptions({
+        alternate,
+        iconPath: this.iconPath,
+        persistenceName,
+      }),
+    );
 
     this.windows.add(targetWindow);
     if (!alternate || !this.mainWindow) {
@@ -254,4 +270,5 @@ function configureSessionPermissions(electronSession, allowedRoots) {
 module.exports = {
   WindowManager,
   configureSessionPermissions,
+  createWindowOptions,
 };

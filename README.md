@@ -11,6 +11,7 @@ A cross-platform desktop client for [PokéClicker](https://www.pokeclicker.com/)
 - Automatic game and desktop-client update checks
 - Customizable Discord Rich Presence
 - Native keyboard and trackpad zoom controls
+- Restores window size and display mode, plus placement where supported
 - Multiple game windows by launching the client a second time
 - Sandboxed game renderer with no Node.js access
 
